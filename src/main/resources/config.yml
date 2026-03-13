@@ -1,0 +1,70 @@
+generator:
+  interval-ticks: 10
+  base-blocks-per-cycle: 1
+  max-blocks-per-cycle: 4
+  base-size: 16
+  max-size: 16
+  particle-preview: true
+  stop-when-no-fuel: true
+
+costs:
+  furnace:
+    kelp: 1
+    bone: 1
+    lava: 1
+  smoker:
+    kelp: 1
+    bone: 1
+    lava: 1
+  blast:
+    kelp: 2
+    bone: 2
+    lava: 2
+
+mode-requirements:
+  enabled: false
+  cube-nearby-any:
+    - WATER
+    - MAGMA_BLOCK
+  cobbler-nearby-any:
+    - WATER
+    - LAVA
+
+materials:
+  furnace-common:
+    - STONE
+    - COBBLESTONE
+    - ANDESITE
+    - DIORITE
+    - GRANITE
+    - CALCITE
+    - SMOOTH_BASALT
+    - SANDSTONE
+    - SAND
+    - GRAVEL
+  furnace-rare:
+    - MOSSY_COBBLESTONE
+    - OBSIDIAN
+  smoker-common:
+    - DIRT
+    - COARSE_DIRT
+    - ROOTED_DIRT
+    - MOSS_BLOCK
+    - OAK_LOG
+    - SPRUCE_LOG
+    - OAK_PLANKS
+    - CLAY
+    - PACKED_MUD
+  smoker-rare:
+    - PODZOL
+    - MUSHROOM_STEM
+  blast-common:
+    - DEEPSLATE
+    - COBBLED_DEEPSLATE
+    - TUFF
+    - BASALT
+    - BLACKSTONE
+    - POLISHED_BASALT
+  blast-rare:
+    - CRYING_OBSIDIAN
+    - POLISHED_BLACKSTONE_BRICKS
