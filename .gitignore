@@ -1,5 +1,6 @@
 # Maven / Java build output
 target/
+/.cp.txt
 out/
 build/
 bin/
