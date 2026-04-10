@@ -1,4 +1,4 @@
-generator:
+﻿generator:
   interval-ticks: 10
   base-blocks-per-cycle: 1
   max-blocks-per-cycle: 4

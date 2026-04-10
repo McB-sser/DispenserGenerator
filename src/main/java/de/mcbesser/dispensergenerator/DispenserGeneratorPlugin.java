@@ -1,4 +1,4 @@
-package de.mcbesser.dispensergenerator;
+﻿package de.mcbesser.dispensergenerator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -1024,14 +1024,14 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         inv.setItem(12, named(Material.BONE_BLOCK, "Knochen-Slot", "Ladung: " + data.boneCharge, "Linksklick: +1", "Rechtsklick: +1 Stack", "Shift-Klick: alles"));
         inv.setItem(14, named(Material.LAVA_BUCKET, "Lava-Slot", "Ladung: " + data.lavaCharge, "Verbraucht nur Lava", "Leere Eimer bleiben im Werfer"));
         inv.setItem(16, named(data.active ? Material.LIME_DYE : Material.RED_DYE, "Generator " + (data.active ? "AN" : "AUS")));
-        inv.setItem(20, named(Material.COMPASS, "Modus: " + (data.mode == GeneratorMode.CUBE ? "Würfel" : "5er Linie")));
+        inv.setItem(20, named(Material.COMPASS, "Modus: " + (data.mode == GeneratorMode.CUBE ? "W\u00fcrfel" : "5er Linie")));
         inv.setItem(22, named(data.particles ? Material.BLAZE_POWDER : Material.GUNPOWDER, "Partikel: " + (data.particles ? "AN" : "AUS")));
-        inv.setItem(24, named(Material.ENCHANTED_BOOK, "Upgrade-Menü"));
+        inv.setItem(24, named(Material.ENCHANTED_BOOK, "Upgrade-Men\u00fc"));
         Costs c = getCostsFor(data.type);
         inv.setItem(26, named(Material.PAPER,
                 "Typ: " + data.type.display,
                 "Kosten/64: " + c.kelp + " Kelp, " + c.bone + " Knochen, " + c.lava + " Lava",
-                "Größe: " + getCurrentSize(data)
+                "Gr\u00f6\u00dfe: " + getCurrentSize(data)
         ));
         player.openInventory(inv);
     }
@@ -1040,11 +1040,11 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         Inventory inv = Bukkit.createInventory(new UpgradeMenuHolder(key), 27, "Werfer Upgrades");
         fill(inv, Material.GRAY_STAINED_GLASS_PANE, " ");
         inv.setItem(10, upgradeSlotItem("Behutsamkeit Slot", enchant("silk_touch"), data.silkTouch));
-        inv.setItem(12, upgradeSlotItem("Glück Slot", enchant("fortune"), data.fortune));
+        inv.setItem(12, upgradeSlotItem("Gl\u00fcck Slot", enchant("fortune"), data.fortune));
         inv.setItem(14, upgradeSlotItem("Reparatur Slot", enchant("mending"), data.mending));
         inv.setItem(16, upgradeSlotItem("Geschwindigkeit Slot", enchant("efficiency"), data.efficiency));
-        inv.setItem(22, upgradeSlotItem("Größe Slot", enchant("unbreaking"), data.sizeUpgrade));
-        inv.setItem(26, named(Material.ARROW, "Zurück"));
+        inv.setItem(22, upgradeSlotItem("Gr\u00f6\u00dfe Slot", enchant("unbreaking"), data.sizeUpgrade));
+        inv.setItem(26, named(Material.ARROW, "Zur\u00fcck"));
         player.openInventory(inv);
     }
 
@@ -1084,7 +1084,7 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         String key = enchantment.getKey().getKey();
         return switch (key) {
             case "silk_touch" -> "Behutsamkeit";
-            case "fortune" -> "Glück";
+            case "fortune" -> "Gl\u00fcck";
             case "mending" -> "Reparatur";
             case "efficiency" -> "Effizienz";
             case "unbreaking" -> "Haltbarkeit";
@@ -1094,15 +1094,15 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
 
     private String upgradeEffectText(Enchantment enchantment) {
         if (enchantment == null) {
-            return "Kein Effekt verfügbar";
+            return "Kein Effekt verf\u00fcgbar";
         }
         String key = enchantment.getKey().getKey();
         return switch (key) {
-            case "silk_touch" -> "Seltene/empfindliche Blöcke bleiben erhalten.";
-            case "fortune" -> "Erhöht die Chance auf Bonus-Drops.";
+            case "silk_touch" -> "Seltene/empfindliche Bl\u00f6cke bleiben erhalten.";
+            case "fortune" -> "Erh\u00f6ht die Chance auf Bonus-Drops.";
             case "mending" -> "Erzeugt gelegentlich Erfahrungsorbs.";
-            case "efficiency" -> "Erhöht Blöcke pro Zyklus.";
-            case "unbreaking" -> "Vergrößert den Wirkungsbereich.";
+            case "efficiency" -> "Erh\u00f6ht Bl\u00f6cke pro Zyklus.";
+            case "unbreaking" -> "Vergr\u00f6\u00dfert den Wirkungsbereich.";
             default -> "Spezialeffekt dieses Upgrades.";
         };
     }
@@ -1170,7 +1170,7 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("Werfer Oregen [" + type.display + "]");
         meta.setLore(Arrays.asList(
-                "Rechtsklick: Generator-Menü",
+                "Rechtsklick: Generator-Men\u00fc",
                 "Shift+Rechtsklick: Werfer-Inventar",
                 "Typ: " + type.display,
                 "Ladung Kelp: " + kelpCharge,
@@ -1316,19 +1316,19 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
             GeneratorType type = switch (args[1].toLowerCase()) {
                 case "ofen", "furnace" -> GeneratorType.FURNACE;
-                case "raeucherofen", "räucherofen", "smoker" -> GeneratorType.SMOKER;
+                case "r\u00e4ucherofen", "r\u00e4ucherofen", "smoker" -> GeneratorType.SMOKER;
                 case "schmiedeofen", "blast", "blastfurnace" -> GeneratorType.BLAST;
                 default -> null;
             };
             if (type == null) {
-                player.sendMessage("Nutze: /oregen give <ofen|räucherofen|schmiedeofen>");
+                player.sendMessage("Nutze: /oregen give <ofen|r\u00e4ucherofen|schmiedeofen>");
                 return true;
             }
             player.getInventory().addItem(createGeneratorItem(type));
             player.sendMessage("Erhalten: " + type.display);
             return true;
         }
-        player.sendMessage("/oregen give <ofen|räucherofen|schmiedeofen>");
+        player.sendMessage("/oregen give <ofen|r\u00e4ucherofen|schmiedeofen>");
         return true;
     }
 
@@ -1338,7 +1338,7 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
             return Collections.singletonList("give");
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
-            return Arrays.asList("ofen", "räucherofen", "schmiedeofen");
+            return Arrays.asList("ofen", "r\u00e4ucherofen", "schmiedeofen");
         }
         return Collections.emptyList();
     }
@@ -1371,7 +1371,7 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
 
     private enum GeneratorType {
         FURNACE("Normaler Ofen", "furnace"),
-        SMOKER("Räucherofen", "smoker"),
+        SMOKER("R\u00e4ucherofen", "smoker"),
         BLAST("Schmiedeofen", "blast");
 
         private final String display;

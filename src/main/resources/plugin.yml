@@ -1,4 +1,4 @@
-name: DispenserGenerator
+﻿name: DispenserGenerator
 version: 1.0.0
 main: de.mcbesser.dispensergenerator.DispenserGeneratorPlugin
 api-version: "1.20"
@@ -7,7 +7,7 @@ author: McB_sser
 commands:
   oregen:
     description: Verwaltung von Werfer Oregen
-    usage: /oregen give <ofen|räucherofen|schmiedeofen>
+    usage: /oregen give <ofen|r\u00e4ucherofen|schmiedeofen>
     permission: dispensergenerator.admin
 
 permissions:
