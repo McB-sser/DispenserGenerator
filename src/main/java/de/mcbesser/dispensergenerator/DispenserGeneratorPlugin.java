@@ -1,4 +1,4 @@
-﻿package de.mcbesser.dispensergenerator;
+package de.mcbesser.dispensergenerator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -1316,7 +1316,7 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
             GeneratorType type = switch (args[1].toLowerCase()) {
                 case "ofen", "furnace" -> GeneratorType.FURNACE;
-                case "r\u00e4ucherofen", "r\u00e4ucherofen", "smoker" -> GeneratorType.SMOKER;
+                case "r\u00e4ucherofen", "smoker" -> GeneratorType.SMOKER;
                 case "schmiedeofen", "blast", "blastfurnace" -> GeneratorType.BLAST;
                 default -> null;
             };
