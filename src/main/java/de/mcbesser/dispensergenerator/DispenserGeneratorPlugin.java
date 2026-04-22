@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Dispenser;
+import org.bukkit.block.data.Directional;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -223,6 +224,7 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         if (sourceKey != null) {
             GeneratorData source = generators.get(sourceKey);
             if (source != null) {
+                source.noSpaceRetryTick = 0L;
                 applyBreakBonuses(source, event.getBlock().getType(), event.getBlock().getLocation());
             }
         }
@@ -314,9 +316,25 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
             if (world == null) {
                 continue;
             }
+            int chunkX = data.x >> 4;
+            int chunkZ = data.z >> 4;
+            if (!world.isChunkLoaded(chunkX, chunkZ)) {
+                continue;
+            }
             Block block = world.getBlockAt(data.x, data.y, data.z);
             if (block.getType() != Material.DISPENSER) {
                 data.active = false;
+                continue;
+            }
+
+            if (data.particles && hasNearbyParticleViewer(block.getLocation())) {
+                showPreview(data, block);
+            }
+            if (!data.active) {
+                continue;
+            }
+            boolean cycleTick = interval == 1 || Math.floorMod(tickCounter + cycleOffset(data), interval) == 0;
+            if (!cycleTick) {
                 continue;
             }
             if (!(block.getState() instanceof Dispenser dispenser)) {
@@ -326,15 +344,6 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
 
             absorbFuelIntoCharge(data, dispenser);
 
-            if (data.particles) {
-                showPreview(data, block);
-            }
-            if (!data.active) {
-                continue;
-            }
-            if (tickCounter % interval != 0) {
-                continue;
-            }
             if (getConfig().getBoolean("mode-requirements.enabled", false) && !modeRequirementsMet(data, block)) {
                 data.active = false;
                 continue;
@@ -356,7 +365,19 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
             }
         }
     }
+
+    private int cycleOffset(GeneratorData data) {
+        int hash = 17;
+        hash = 31 * hash + data.worldName.hashCode();
+        hash = 31 * hash + data.x;
+        hash = 31 * hash + data.y;
+        hash = 31 * hash + data.z;
+        return hash;
+    }
     private boolean generateOneBlock(GeneratorData data, Block dispenserBlock) {
+        if (tickCounter < data.noSpaceRetryTick) {
+            return false;
+        }
         BlockFace face = getOutputFace(dispenserBlock);
         Location output = dispenserBlock.getLocation().add(0.5, 0.5, 0.5).add(face.getModX(), face.getModY(), face.getModZ());
         List<Vector> pattern = getPattern(data, face);
@@ -364,7 +385,10 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
             return false;
         }
 
-        for (Vector rel : pattern) {
+        int startIndex = Math.floorMod(data.cursorIndex, pattern.size());
+        for (int checked = 0; checked < pattern.size(); checked++) {
+            int index = (startIndex + checked) % pattern.size();
+            Vector rel = pattern.get(index);
             Block target = mapLocalToWorld(output, face, rel).getBlock();
             if (!isAir(target.getType())) {
                 continue;
@@ -375,8 +399,11 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
             generatedBlocks.put(LocationKey.of(target.getLocation()),
                     new LocationKey(data.worldName, data.x, data.y, data.z));
             data.remainingCharge--;
+            data.cursorIndex = (index + 1) % pattern.size();
+            data.noSpaceRetryTick = 0L;
             return true;
         }
+        data.noSpaceRetryTick = tickCounter + Math.max(1L, getConfig().getLong("generator.full-area-retry-ticks", 20L));
         return false;
     }
 
@@ -450,6 +477,23 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
 
     private void spawnPreviewPoint(World world, Location origin, BlockFace face, int x, int y, int z) {
         world.spawnParticle(Particle.END_ROD, mapLocalToWorld(origin, face, new Vector(x, y, z)), 1, 0, 0, 0, 0);
+    }
+
+    private boolean hasNearbyParticleViewer(Location location) {
+        if (location == null || location.getWorld() == null) {
+            return false;
+        }
+        double maxDistance = getConfig().getDouble("generator.particle-view-distance", 64.0D);
+        double maxDistanceSquared = maxDistance * maxDistance;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.isOnline() || player.isDead() || player.getWorld() != location.getWorld()) {
+                continue;
+            }
+            if (player.getLocation().distanceSquared(location) <= maxDistanceSquared) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private List<Vector> getPattern(GeneratorData data, BlockFace face) {
@@ -722,8 +766,7 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
     }
 
     private BlockFace getOutputFace(Block dispenserBlock) {
-        if (dispenserBlock.getState() instanceof Dispenser dispenser
-                && dispenser.getBlockData() instanceof org.bukkit.block.data.Directional directional) {
+        if (dispenserBlock.getBlockData() instanceof Directional directional) {
             return directional.getFacing();
         }
         return BlockFace.NORTH;
@@ -1403,6 +1446,7 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         int lavaCharge;
         int remainingCharge;
         int cursorIndex;
+        long noSpaceRetryTick;
 
         int silkTouch;
         int fortune;
