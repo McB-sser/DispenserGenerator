@@ -148,7 +148,7 @@ Der Generator wird als spezieller Werfer gesetzt. Die Ausrichtung des Werfers be
 ### Menü öffnen
 
 - `Rechtsklick` auf den Generator öffnet das Generator-Menü.
-- `Shift + Rechtsklick` öffnet direkt das Inventar des Werfers.
+- `Ducken + Rechtsklick` öffnet direkt das Inventar des Werfers.
 
 ### Generator mit Ladung versorgen
 
@@ -163,7 +163,7 @@ Es gibt mehrere Möglichkeiten, Brennstoffe einzulagern:
 - Gegenstand mit dem Cursor direkt auf den passenden Slot klicken
 - Linksklick für kleine Mengen
 - Rechtsklick für einen Stack
-- Shift-Klick, um alle passenden Items aus dem Inventar einzulagern
+- Ducken + Klick, um alle passenden Items aus dem Inventar einzulagern
 - Alternativ können die Rohstoffe direkt in das Werfer-Inventar gelegt werden; das Plugin zieht sie automatisch ein
 
 ### Generator starten

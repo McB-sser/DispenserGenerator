@@ -1063,8 +1063,8 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         }
 
         fill(inv, Material.GRAY_STAINED_GLASS_PANE, " ");
-        inv.setItem(10, named(Material.DRIED_KELP_BLOCK, "Kelp-Slot", "Ladung: " + data.kelpCharge, "Linksklick: +1", "Rechtsklick: +1 Stack", "Shift-Klick: alles"));
-        inv.setItem(12, named(Material.BONE_BLOCK, "Knochen-Slot", "Ladung: " + data.boneCharge, "Linksklick: +1", "Rechtsklick: +1 Stack", "Shift-Klick: alles"));
+        inv.setItem(10, named(Material.DRIED_KELP_BLOCK, "Kelp-Slot", "Ladung: " + data.kelpCharge, "Linksklick: +1", "Rechtsklick: +1 Stack", "Ducken + Klick: alles"));
+        inv.setItem(12, named(Material.BONE_BLOCK, "Knochen-Slot", "Ladung: " + data.boneCharge, "Linksklick: +1", "Rechtsklick: +1 Stack", "Ducken + Klick: alles"));
         inv.setItem(14, named(Material.LAVA_BUCKET, "Lava-Slot", "Ladung: " + data.lavaCharge, "Verbraucht nur Lava", "Leere Eimer bleiben im Werfer"));
         inv.setItem(16, named(data.active ? Material.LIME_DYE : Material.RED_DYE, "Generator " + (data.active ? "AN" : "AUS")));
         inv.setItem(20, named(Material.COMPASS, "Modus: " + (data.mode == GeneratorMode.CUBE ? "W\u00fcrfel" : "5er Linie")));
@@ -1214,7 +1214,7 @@ public final class DispenserGeneratorPlugin extends JavaPlugin implements Listen
         meta.setDisplayName("Werfer Oregen [" + type.display + "]");
         meta.setLore(Arrays.asList(
                 "Rechtsklick: Generator-Men\u00fc",
-                "Shift+Rechtsklick: Werfer-Inventar",
+                        "Ducken + Rechtsklick: Werfer-Inventar",
                 "Typ: " + type.display,
                 "Ladung Kelp: " + kelpCharge,
                 "Ladung Knochen: " + boneCharge,
